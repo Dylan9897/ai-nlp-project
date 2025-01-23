@@ -17,6 +17,31 @@ from module.FocalLoss import FocalLoss
 args = return_args()
 reset_console(args)
 
+
+def evaluate_model(model, metric, data_loader):
+    """
+    在测试集上评估当前模型的训练效果。
+
+    Args:
+        model: 当前模型
+        metric: 评估指标类(metric)
+        data_loader: 测试集的dataloader
+        global_step: 当前训练步数
+    """
+    model.eval()
+    with torch.no_grad():
+        for step, batch in enumerate(data_loader):
+            outputs = model(input_ids=batch['input_ids'].to(args.device),
+                            attention_mask=batch['attention_mask'].to(args.device))
+            predictions = outputs.logits.argmax(dim=-1).detach().cpu().numpy().tolist()
+            metric.add_batch(pred_batch=predictions, gold_batch=batch["labels"].detach().cpu().numpy().tolist())
+    eval_metric = metric.compute()
+    model.train()
+    return eval_metric['accuracy'], eval_metric['precision'], \
+        eval_metric['recall'], eval_metric['f1'], \
+        eval_metric['class_metrics']
+
+
 def train():
     model = AutoModelForSequenceClassification.from_pretrained(args.model, num_labels=args.num_labels)
     tokenizer = AutoTokenizer.from_pretrained(args.model)
