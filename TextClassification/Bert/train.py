@@ -17,6 +17,24 @@ from module.FocalLoss import FocalLoss
 args = return_args()
 reset_console(args)
 
+# 使用差分学习率
+def get_parameters(model, model_init_lr, multiplier, classifier_lr):
+    parameters = []
+    lr = model_init_lr
+    for layer in range(12, -1, -1):
+        layer_params = {
+            'params': [p for n, p in model.named_parameters() if f'encoder.layer.{layer}.' in n],
+            'lr': lr
+        }
+        parameters.append(layer_params)
+        lr *= multiplier
+    classifier_params = {
+        'params': [p for n, p in model.named_parameters() if 'layer_norm' in n or 'linear' in n
+                   or 'pooling' in n],
+        'lr': classifier_lr
+    }
+    parameters.append(classifier_params)
+    return parameters
 
 def evaluate_model(model, metric, data_loader):
     """
