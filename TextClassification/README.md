@@ -56,3 +56,59 @@ weighted avg     0.9736    0.9733    0.9733      1050
 
 ```
 
+## 3、TextCNN
+
+## 4、Bert
+
+运行脚本
+
+```bash
+export HF_ENDPOINT=https://hf-mirror.com
+python train.py \
+    --train_file data/datasets/longnews/train.json \
+    --valid_file data/datasets/longnews/dev.json \
+    --num_labels 7 \
+    --output output_bert_base_chinese_thucnews
+```
+
+模型训练结果如下：
+
+LongNews
+
+```python
+                precision    recall  f1-score   support
+
+          教育       0.97      0.98      0.97       154
+          财经       0.97      0.94      0.95       130
+          科技       0.97      0.99      0.98       135
+          房产       0.95      0.95      0.95       156
+          时政       0.95      0.95      0.95       130
+          家居       0.96      0.96      0.96       158
+          时尚       0.99      1.00      1.00       138
+
+    accuracy                           0.97      1001
+   macro avg       0.97      0.97      0.97      1001
+weighted avg       0.97      0.97      0.97      1001
+```
+
+ThucNews
+
+```python
+               precision    recall  f1-score   support
+
+      finance       0.92      0.93      0.92      1000
+       realty       0.96      0.95      0.95      1000
+       stocks       0.91      0.89      0.90      1000
+    education       0.96      0.97      0.97      1000
+      science       0.91      0.90      0.91      1000
+      society       0.90      0.95      0.93      1000
+     politics       0.92      0.92      0.92      1000
+       sports       0.98      0.98      0.98      1000
+         game       0.97      0.94      0.95      1000
+entertainment       0.95      0.97      0.96      1000
+
+     accuracy                           0.94     10000
+    macro avg       0.94      0.94      0.94     10000
+ weighted avg       0.94      0.94      0.94     10000
+```
+

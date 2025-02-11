@@ -48,7 +48,6 @@ def compute_metrics(eval_pred):
 
     return {"precision": precision, "recall": recall, "f1-score": f1, 'accuracy': accuracy}
 
-
 train_dataset = load_data(train_data)
 valid_dataset = load_data(valid_data)
 
